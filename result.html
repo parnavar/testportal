@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            text-align: center;
+        }
+        canvas {
+            max-width: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Your Test Result</h2>
+<p><strong>Marks Obtained: <span id="marksObtained"></span> / 720</strong></p>
+<p><strong>Percentage: <span id="percentage"></span>%</strong></p>
+
+<canvas id="resultChart"></canvas>
+
+<script>
+    const marks = localStorage.getItem('testScore');
+    const percentage = localStorage.getItem('testPercentage');
+
+    document.getElementById('marksObtained').innerText = marks;
+    document.getElementById('percentage').innerText = percentage;
+
+    const correct = marks / 4;
+    const incorrect = (marks - (correct * 4)) / -1;
+    const unattempted = 180 - (correct + incorrect);
+
+    const ctx = document.getElementById('resultChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Correct', 'Incorrect', 'Unattempted'],
+            datasets: [{
+                data: [correct, incorrect, unattempted],
+                backgroundColor: ['#4caf50', '#f44336', '#9e9e9e']
+            }]
+        }
+    });
+
+    // Clear data after showing result
+    localStorage.removeItem('testScore');
+    localStorage.removeItem('testPercentage');
+</script>
+
+</body>
+</html>
