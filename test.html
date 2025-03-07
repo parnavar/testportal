@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Online Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options input {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #6c4cf0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Online Test</h2>
+<form id="testForm">
+    <div id="questionsContainer"></div>
+    <button type="button" onclick="submitTest()">Submit Test</button>
+</form>
+
+<script>
+let correctAnswers = {};
+
+async function loadQuestions() {
+    const baseImageURL = 'https://raw.githubusercontent.com/parnavar/testportal/main/images/';
+    const answersURL = 'https://raw.githubusercontent.com/parnavar/testportal/main/answers.json';
+
+    const response = await fetch(answersURL);
+    const answers = await response.json();
+    correctAnswers = answers;
+
+    const questionsContainer = document.getElementById('questionsContainer');
+
+    for (let i = 1; i <= 180; i++) {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+
+        const questionImage = document.createElement('img');
+        questionImage.src = `${baseImageURL}${i}.png`;
+        questionImage.style.width = '100%';
+        questionDiv.appendChild(questionImage);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+        ['A', 'B', 'C', 'D'].forEach(option => {
+            const label = document.createElement('label');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `question${i}`;
+            input.value = option;
+            label.appendChild(input);
+            label.append(` Option ${option}`);
+            optionsDiv.appendChild(label);
+            optionsDiv.appendChild(document.createElement('br'));
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        questionsContainer.appendChild(questionDiv);
+    }
+}
+
+function submitTest() {
+    const form = document.getElementById('testForm');
+    const formData = new FormData(form);
+    let score = 0;
+
+    for (let i = 1; i <= 180; i++) {
+        const selectedOption = formData.get(`question${i}`);
+        if (selectedOption) {
+            if (selectedOption === correctAnswers[i.toString()]) {
+                score += 4;
+            } else {
+                score -= 1;
+            }
+        }
+    }
+
+    const percentage = (score / 720) * 100;
+    localStorage.setItem('testScore', score);
+    localStorage.setItem('testPercentage', percentage.toFixed(2));
+    window.location.href = 'result.html';
+}
+
+window.onload = loadQuestions;
+</script>
+</body>
+</html>
