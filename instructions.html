@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>General Instructions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            text-align: center;
+        }
+        button {
+            background-color: #6c4cf0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #5a3ce0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>GENERAL INSTRUCTIONS</h2>
+        <p><strong>Please read the instructions carefully</strong></p>
+        <p>1. Question Paper Pattern: The question paper will consist of 180 compulsory questions.</p>
+        <p>2. Examination Duration: The total duration of the examination will be 180 minutes (3 hours)</p>
+        <p>3. There is only one correct response for each question.</p>
+        <p>4. Each correct answer will give 4 marks while 1 mark will be deducted for a wrong answer. The maximum marks are 720.</p>
+        
+        <button onclick="startTest()">Start Test</button>
+    </div>
+
+    <script>
+        function startTest() {
+            window.location.href = 'test.html';
+        }
+    </script>
+</body>
+</html>
