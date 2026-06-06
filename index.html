@@ -1,382 +1,674 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parnav Roy | Medwise Academy Hub</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Custom Extracted CSS File Connection -->
-    <link rel="stylesheet" href="styles.css">
+    <title>Parnav Roy | Advanced GOD-POD Glucose Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #38bdf8;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #0284c7;
+            --pink-reagent: #f43f5e;
+            --water-blue: #0ea5e9;
+            --blood-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 32px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lab-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand span { color: var(--text-main); }
+
+        .method-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+
+        /* Lab Stage / Workbench */
+        .lab-stage {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .instruction-banner {
+            background: rgba(30, 41, 59, 0.9);
+            border-left: 4px solid var(--text-main);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.5;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .bench-layout {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            align-items: flex-end;
+            margin: 40px 0;
+            min-height: 260px;
+        }
+
+        .lab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .vial-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 160px;
+            width: 100%;
+        }
+
+        /* Visual Vessels */
+        .vessel {
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1), inset 0 0 15px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .bottle {
+            width: 70px;
+            height: 130px;
+            border-radius: 8px 8px 16px 16px;
+        }
+
+        .tube {
+            width: 36px;
+            height: 140px;
+            border-radius: 0 0 18px 18px;
+        }
+
+        .fluid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0%;
+            transition: height 1s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease;
+            box-shadow: inset 0 10px 10px rgba(255,255,255,0.2);
+        }
+
+        /* Micro Pipette Graphics */
+        .pipette-tool {
+            position: absolute;
+            top: -20px;
+            width: 24px;
+            height: 90px;
+            background: #cbd5e1;
+            border: 2px solid #64748b;
+            border-radius: 4px 4px 2px 2px;
+            z-index: 10;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .pipette-tool::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            width: 6px;
+            height: 30px;
+            background: #e2e8f0;
+            border: 1px solid #94a3b8;
+            border-top: none;
+        }
+        .pipette-tool.dragging { opacity: 0.5; cursor: grabbing; }
+
+        /* Colorimeter Graphic */
+        .colorimeter-unit {
+            width: 180px;
+            height: 150px;
+            background: #334155;
+            border: 2px solid #475569;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .screen {
+            background: #022c22;
+            border: 2px solid #059669;
+            height: 46px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            font-weight: bold;
+            color: #34d399;
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+        }
+
+        .slot-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cuvette-slot {
+            width: 44px;
+            height: 44px;
+            background: #0f172a;
+            border: 2px dashed #64748b;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .cuvette-slot.drag-over {
+            border-color: var(--text-main);
+            background: rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 15px var(--text-main);
+        }
+
+        .calib-btn {
+            flex-1: 1;
+            padding: 8px;
+            background: #ef4444;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+        .calib-btn:hover:not(:disabled) { background: #dc2626; }
+        .calib-btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.5; }
+
+        .label-tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        /* Drag over effect for test tubes */
+        .vial-wrapper.drag-over .vessel {
+            border-color: var(--text-main);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Action Controls Layout */
+        .action-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn-prime {
+            padding: 14px 28px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        }
+        .btn-prime:hover { background: #0369a1; transform: translateY(-1px); }
+        .btn-prime:disabled { background: #334155; color: #64748b; box-shadow: none; cursor: not-allowed; }
+
+        /* Sidebar Panels */
+        .panel-right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: var(--text-light);
+            border-left: 3px solid var(--text-main);
+            padding-left: 8px;
+        }
+
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+        .step-item.active { color: var(--text-light); font-weight: 600; }
+        .step-item.completed { color: #10b981; text-decoration: line-through; opacity: 0.6; }
+        .step-item i { font-size: 14px; }
+
+        .matrix-box { display: none; }
+        .matrix-box.visible { display: block; animation: fadeIn 0.5s ease forwards; }
+
+        .formula {
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 14px;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        input[type="number"]:focus { border-color: var(--text-main); }
+
+        /* Utilities & Animations */
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-4px, 4px) rotate(-3deg); }
+            75% { transform: translate(4px, -4px) rotate(3deg); }
+        }
+        .shaking { animation: shake 0.15s infinite; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-brand/10 transition-colors duration-300">
+<body>
 
-    <!-- Top Sticky Navigation Bar -->
-    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex justify-between items-center shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-brand to-brand-dark flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-brand/20">
-                PR
+    <div class="game-container">
+        <!-- Application Header -->
+        <div class="lab-header">
+            <div class="brand"><i class="fa-solid fa-flask-vial"></i> parnav roy <span>| Clinical Biochemistry</span></div>
+            <div class="method-badge">METHOD: GOD-POD PHOTOMETRIC</div>
+        </div>
+
+        <!-- Interactive Core Bench Area -->
+        <div class="lab-stage">
+            <div class="instruction-banner" id="main-prompt">
+                <strong>Step 1:</strong> Drag the 1000 µL Micropipette from the GOD-POD Reagent bottle and drop it directly onto the <strong>Reaction Tube</strong> to transfer the substrate enzyme.
             </div>
-            <div>
-                <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">PARNAV ROY</span>
-                <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-[-2px]">Medwise Academy</span>
+
+            <div class="bench-layout">
+                <!-- Distilled Water Bottle -->
+                <div class="lab-item" id="vial-dh2o">
+                    <div class="vial-wrapper" id="wrap-dh2o">
+                        <div class="vessel bottle">
+                            <div class="fluid" id="fluid-dh2o" style="height: 85%; background: rgba(14, 165, 233, 0.45);"></div>
+                        </div>
+                    </div>
+                    <span class="label-tag">Distilled H₂O</span>
+                </div>
+
+                <!-- GOD-POD Reagent Bottle -->
+                <div class="lab-item" id="vial-reagent">
+                    <div class="vial-wrapper" id="wrap-reagent">
+                        <div id="pipette-r" class="pipette-tool" draggable="true" ondragstart="drag(event)"></div>
+                        <div class="vessel bottle">
+                            <div class="fluid" id="fluid-reagent" style="height: 75%; background: rgba(56, 189, 248, 0.35);"></div>
+                        </div>
+                    </div>
+                    <span class="label-tag">GOD-POD Reagent</span>
+                </div>
+
+                <!-- Patient Blood Sample -->
+                <div class="lab-item" id="vial-sample">
+                    <div class="vial-wrapper" id="wrap-sample">
+                        <div id="pipette-s" class="pipette-tool" draggable="false" style="display:none; background:#fda4af;"></div>
+                        <div class="vessel bottle">
+                            <div class="fluid" id="fluid-sample" style="height: 50%; background: rgba(185, 28, 28, 0.85);"></div>
+                        </div>
+                    </div>
+                    <span class="label-tag">Patient Plasma</span>
+                </div>
+
+                <!-- Active Analytical Vessels Container -->
+                <div class="lab-item" id="vial-target">
+                    <div class="vial-wrapper" id="wrap-tube" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="drop(event)">
+                        <div class="vessel tube" id="main-tube" draggable="false" ondragstart="dragTube(event)">
+                            <div class="fluid" id="reaction-fluid"></div>
+                        </div>
+                    </div>
+                    <span class="label-tag" id="tube-label">Reaction Tube</span>
+                </div>
+            </div>
+
+            <!-- Context Processing Area -->
+            <div class="action-row">
+                <button class="btn-prime" id="action-btn" disabled onclick="handleIncubation()">Mix & Incubate Solution</button>
             </div>
         </div>
 
-        <div class="flex items-center space-x-4">
-            <!-- Live Clock Widget Component Layer -->
-            <div class="hidden md:flex items-center space-x-2 bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-slate-500">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-brand animate-pulse"></i>
-                <span id="liveDigitalClock">00:00:00 IST</span>
+        <!-- Sidebar Analytics Matrix -->
+        <div class="panel-right">
+            <div class="card">
+                <h3>Lab Procedure Tracker</h3>
+                <ul class="step-list">
+                    <li class="step-item active" id="step-1"><i class="fa-solid fa-circle-dot"></i> Pipette 1000 µL GOD-POD Reagent</li>
+                    <li class="step-item" id="step-2"><i class="fa-solid fa-circle-dot"></i> Add 10 µL Patient Plasma Sample</li>
+                    <li class="step-item" id="step-3"><i class="fa-solid fa-circle-dot"></i> Incubate Tube (37°C for 10 mins)</li>
+                    <li class="step-item" id="step-4"><i class="fa-solid fa-circle-dot"></i> Insert Blank (H₂O) & Zero Colorimeter</li>
+                    <li class="step-item" id="step-5"><i class="fa-solid fa-circle-dot"></i> Measure Sample Absorbance at 505nm</li>
+                </ul>
             </div>
 
-            <div class="hidden xl:flex space-x-6 text-xs font-bold uppercase tracking-wider text-slate-500 mr-4">
-                <a href="#about" class="hover:text-brand transition-colors">Instructor</a>
-                <a href="#productivity" class="hover:text-brand transition-colors">Productivity Matrix</a>
-                <a href="#curriculum" class="hover:text-brand transition-colors">Syllabus Vault</a>
-                <a href="#recall-zone" class="hover:text-brand transition-colors">Active Recall</a>
-                <a href="#analytics" class="hover:text-brand transition-colors">Performance Analytics</a>
-            </div>
-            
-            <select id="boardFilter" onchange="filterBoard(this.value)" class="bg-brand-light text-brand text-xs font-bold px-3 py-2 rounded-xl border border-brand/10 outline-none cursor-pointer hover:bg-brand-slate transition-all">
-                <option value="all">All Curriculum</option>
-                <option value="icse">ICSE Class 10</option>
-                <option value="cbse">CBSE Class 10</option>
-            </select>
-        </div>
-    </nav>
-
-    <!-- Main Grid Workspace Layout -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
-
-        <!-- Instructor Banner Section -->
-        <section id="about" class="glass-card rounded-3xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 shadow-sm relative overflow-hidden">
-            <div class="lg:col-span-2 space-y-3">
-                <div class="inline-flex items-center space-x-2 bg-brand-light text-brand text-xs font-bold px-3 py-1 rounded-full">
-                    <i data-lucide="award" class="w-3.5 h-3.5"></i>
-                    <span>Taught by Parnav Roy • Government Dental College, Calcutta</span>
-                </div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    Class 10 Advanced Science Performance Hub
-                </h1>
-                <p class="text-slate-600 max-w-3xl text-sm leading-relaxed">
-                    Welcome to your custom digital study station. This workspace combines standard curriculum files with advanced diagnostic trackers, study tools, and timers built to help you master Class 10 Biology and Chemistry systematically.
-                </p>
-            </div>
-            <!-- Quick Session Goals Widget -->
-            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-[11px] font-bold uppercase tracking-wide text-slate-400">Target Benchmark</span>
-                    <span class="text-xs font-bold text-brand">2026 Board Layout</span>
-                </div>
-                <div class="text-2xl font-black text-slate-800">100% Mastery Goal</div>
-                <p class="text-[11px] text-slate-400 mt-1">Interleave subject blocks to reinforce spatial memory.</p>
-            </div>
-        </section>
-
-        <!-- Advanced Productivity Matrix Grid Area -->
-        <section id="productivity" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Focus Engine Panel (Timer & Ambient Media Controllers) -->
-            <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between shadow-sm relative group overflow-hidden">
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                            <i data-lucide="timer" class="w-4 h-4 text-brand"></i> Focus Engine
-                        </h3>
-                        <button onclick="launchFullscreenSprint()" class="p-1.5 bg-slate-50 hover:bg-brand-light text-slate-500 hover:text-brand rounded-lg transition-all" title="Launch Immersive Fullscreen">
-                            <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-
-                    <!-- Media Selection Panel -->
-                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-2">
-                        <label class="text-[10px] font-bold text-slate-400 block uppercase tracking-wide">High-Yield Energy Audio Track</label>
-                        <div class="flex gap-2">
-                            <button onclick="setAudioSource('refreshing')" id="btn-audio-refreshing" class="flex-1 py-1.5 bg-brand text-white text-xs font-bold rounded-lg border border-brand/10 transition-all">⚡ Refreshing Mix</button>
-                            <button onclick="setAudioSource('motivating')" id="btn-audio-motivating" class="flex-1 py-1.5 bg-white text-slate-600 text-xs font-bold rounded-lg border border-slate-200 hover:border-brand/40 transition-all">🔥 Motivational Beat</button>
-                        </div>
-                    </div>
-
-                    <!-- Digital Countdown Display -->
-                    <div class="text-center py-4 space-y-1">
-                        <div id="miniTimer" class="text-5xl font-mono font-black tracking-tight text-slate-900">25:00</div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider" id="sprintLabel">Sprint Strategy: Active</p>
-                    </div>
-                </div>
-
-                <div class="flex gap-2 mt-4">
-                    <button id="miniPlayBtn" onclick="toggleTimerSystem()" class="flex-1 bg-brand hover:bg-brand-dark text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-md shadow-brand/10">Start Sprint</button>
-                    <button onclick="resetTimerSystem()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-                </div>
-
-                <!-- Web Audio Element Framework Blocks -->
-                <audio id="audio-refreshing" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
-                <audio id="audio-motivating" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"></audio>
-            </div>
-
-            <!-- Dynamic Task Management Matrix -->
-            <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                        <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                            <i data-lucide="check-square" class="w-4 h-4 text-brand"></i> Syllabus Checkpoints
-                        </h3>
-                        <span id="taskCounter" class="text-[11px] font-bold bg-brand-light text-brand px-2 py-0.5 rounded-full">0 Completed</span>
-                    </div>
-
-                    <!-- Interactive Task Container Array -->
-                    <div id="todoListContainer" class="space-y-2 max-h-[160px] overflow-y-auto no-scrollbar">
-                        <div class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold">
-                            <span class="text-slate-700">Practice cell cycle mitosis diagram paths</span>
-                            <button onclick="this.parentElement.remove(); updateTaskCounters();" class="text-slate-400 hover:text-rose-500 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-2 mt-4">
-                    <input type="text" id="newTaskInput" placeholder="Add target chapter checkpoint..." class="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs outline-none focus:border-brand/40 focus:bg-white transition-all">
-                    <button onclick="addNewWorkspaceTask()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 rounded-xl transition-all">Add</button>
-                </div>
-            </div>
-
-            <!-- Live Session Brain Dump / Scratchpad Module -->
-            <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
-                <div class="space-y-3">
-                    <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                        <i data-lucide="edit-3" class="w-4 h-4 text-brand"></i> Smart Note Scratchpad
-                    </h3>
-                    <p class="text-[11px] text-slate-400">Jot down temporary mnemonic mappings, formula derivations, or active observations here.</p>
-                    <textarea id="scratchpadArea" oninput="saveScratchpadContent(this.value)" placeholder="Type structural formula scratch notes here... (Data auto-saves instantly to storage)" class="w-full h-28 p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-mono outline-none focus:border-brand/30 focus:bg-white transition-all resize-none"></textarea>
-                </div>
-                <div class="text-[10px] text-right text-slate-400 font-medium">Auto-Saving to Memory Buffer</div>
-            </div>
-        </section>
-
-        <!-- Advanced Analytics Matrix: Focus Metric Dashboard Rows -->
-        <section id="sessionInsights" class="bg-gradient-to-r from-slate-900 to-brand-dark text-white rounded-3xl p-6 shadow-md grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div class="flex items-center space-x-4 border-r border-white/10 last:border-0 pr-4">
-                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-accent">
-                    <i data-lucide="zap" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Cycles Logged</span>
-                    <span id="statCyclesCounter" class="text-2xl font-black font-mono">0</span>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4 border-r border-white/10 last:border-0 pr-4">
-                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-emerald-400">
-                    <i data-lucide="hourglass" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Productive Time</span>
-                    <span id="statTimeStudied" class="text-2xl font-black font-mono">0 mins</span>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-amber-400">
-                    <i data-lucide="trending-up" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Focus Intensity</span>
-                    <span id="statFocusVelocity" class="text-2xl font-black font-mono">Optimal</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Document Resource Framework Grid -->
-        <section id="curriculum" class="space-y-6">
-            <div class="bg-white border border-slate-100 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-sm">
-                <div>
-                    <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">Class 10 High-Yield Chapter Vault</h2>
-                    <p class="text-xs text-slate-400">Click on any module node block to open standalone resource files seamlessly.</p>
-                </div>
-                <div class="relative w-full sm:w-72">
-                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
-                    <input type="text" id="chapterSearch" onkeyup="searchChaptersEngine()" placeholder="Query file path (e.g. cell, table)..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs outline-none focus:border-brand/30 focus:bg-white transition-all">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- BIOLOGY DISCIPLINE PATHS -->
-                <div class="space-y-3">
-                    <div class="flex items-center space-x-2 pb-1 border-b border-slate-200">
-                        <i data-lucide="dna" class="w-4 h-4 text-emerald-600"></i>
-                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Biology Master Files</h4>
-                    </div>
-
-                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
-                        <div class="space-y-0.5">
-                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
-                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Structure of Chromosomes & Cell Cycle Phases</h5>
-                        </div>
-                        <a href="cell.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-                    </div>
-
-                    <div data-board="icse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
-                        <div class="space-y-0.5">
-                            <span class="text-[9px] font-extrabold tracking-wide text-brand uppercase">ICSE Exclusive Node</span>
-                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Plant Physiology: Absorption Mechanisms & Transpiration Pull</h5>
-                        </div>
-                        <a href="transpiration.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-                    </div>
-
-                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
-                        <div class="space-y-0.5">
-                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
-                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Human Anatomy: Circulatory Network Architecture & Excretory Loops</h5>
-                        </div>
-                        <a href="circulatory_system.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-                    </div>
-                </div>
-
-                <!-- CHEMISTRY DISCIPLINE PATHS -->
-                <div class="space-y-3">
-                    <div class="flex items-center space-x-2 pb-1 border-b border-slate-200">
-                        <i data-lucide="beaker" class="w-4 h-4 text-amber-600"></i>
-                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Chemistry Master Files</h4>
-                    </div>
-
-                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
-                        <div class="space-y-0.5">
-                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
-                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Periodic Properties, Trends & Chemical Bonding Trends</h5>
-                        </div>
-                        <a href="periodic_table.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-                    </div>
-
-                    <div data-board="icse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
-                        <div class="space-y-0.5">
-                            <span class="text-[9px] font-extrabold tracking-wide text-brand uppercase">ICSE Exclusive Node</span>
-                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Stoichiometry Balances & Mole Concept Quantities</h5>
-                        </div>
-                        <a href="mole_concept.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
-                    </div>
-
-                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
-                        <div class="space-y-0.5">
-                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
-                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Study of Acids, Bases, Salts Behavior & Industrial Electrolysis</h5>
-                        </div>
-                        <a href="electrolysis.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+            <!-- Colorimeter Peripheral Box Inside Tracker Panel -->
+            <div class="card" style="display: flex; justify-content: center;">
+                <div class="colorimeter-unit">
+                    <div class="screen" id="calib-screen">OFF</div>
+                    <div class="slot-row">
+                        <button class="calib-btn" id="zero-btn" disabled onclick="zeroDevice()">Zero</button>
+                        <div class="cuvette-slot" id="analyzer-slot" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="dropTube(event)"></div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Twin Interactive Utility Block Row -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <!-- Active Recall Diagnostic Core Module -->
-            <div id="recall-zone" class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm flex flex-col justify-between space-y-4">
-                <div class="space-y-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-extrabold tracking-widest text-brand uppercase bg-brand-light px-2.5 py-1 rounded-md">Diagnostic Matrix</span>
-                        <!-- Flashcard Selector Configuration Node -->
-                        <select id="recallSubjectFilter" onchange="swapActiveRecallCategory(this.value)" class="text-xs bg-slate-50 border border-slate-200 rounded-lg p-1 outline-none font-bold text-slate-600">
-                            <option value="all">All Syllabus Core</option>
-                            <option value="bio">Biology Paths</option>
-                            <option value="chem">Chemistry Analysis</option>
-                        </select>
-                    </div>
-                    <h3 class="text-base font-bold text-slate-900 mt-2">Active Recall Engine Block</h3>
-                    <p class="text-[11px] text-slate-400">Self-verify essential conceptual trends prior to checking your structural response sets.</p>
+            <!-- Mathematical Evaluation Profile -->
+            <div class="card matrix-box" id="calc-matrix">
+                <h3>Diagnostic Analytics</h3>
+                <p style="font-size: 13px; color: var(--text-muted);">Concentration Formula Profile:</p>
+                <div class="formula">
+                    Glucose (mg/dL) = (A_Test / A_Std) × 100
                 </div>
-                <div class="bg-slate-50 rounded-2xl p-6 text-center border border-slate-100 min-h-[110px] flex items-center justify-center font-bold text-xs text-slate-700 leading-relaxed transition-all duration-200" id="recallField">
-                    What compound separates at the anode loop during electrolysis of copper sulphate using platinum nodes?
+                <div style="font-size: 12px; line-height: 1.6; color: var(--text-muted);" id="metric-givens">
+                    Standard parameter: A_Std = 0.400
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="revealAnswerBlock()" class="flex-1 bg-brand text-white text-xs font-bold py-2 rounded-xl hover:bg-brand-dark transition-all">Reveal Concept</button>
-                    <button onclick="cycleNextCard()" class="flex-1 bg-white text-slate-700 border border-slate-200 text-xs font-bold py-2 rounded-xl hover:bg-slate-50 transition-all">Next Card</button>
+                <div style="margin-top: 14px;">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-main);">Calculate Final Concentration:</label>
+                    <input type="number" id="user-input-calc" placeholder="Value in mg/dL">
+                    <button class="btn-prime" style="width: 100%; margin-top: 12px; padding: 10px;" onclick="verifyMetrics()">Verify Diagnosis</button>
                 </div>
             </div>
-
-            <!-- Integrated Session Performance Metrics Analytics Widget -->
-            <div id="analytics" class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm flex flex-col justify-between">
-                <div class="space-y-3">
-                    <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-brand"></i> Real-Time Diagnostics
-                    </h3>
-                    <p class="text-[11px] text-slate-400">Track structural calibration markers across active recall modules during this study timeline window.</p>
-                    
-                    <div class="space-y-3 pt-2">
-                        <div>
-                            <div class="flex justify-between text-[11px] font-bold text-slate-600 mb-1">
-                                <span>Biology Comprehension Map</span>
-                                <span id="bioBarPct">65%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                <div id="bioBarFluid" class="bg-emerald-500 h-full w-[65%] transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-[11px] font-bold text-slate-600 mb-1">
-                                <span>Chemistry Analytical Balance</span>
-                                <span id="chemBarPct">40%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                <div id="chemBarFluid" class="bg-amber-500 h-full w-[40%] transition-all duration-500"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-2 pt-4 border-t border-slate-100">
-                    <button onclick="boostStatMetric('bio')" class="flex-1 text-[10px] font-bold py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-all">+ Log Bio Mastered</button>
-                    <button onclick="boostStatMetric('chem')" class="flex-1 text-[10px] font-bold py-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg hover:bg-amber-100 transition-all">+ Log Chem Mastered</button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FULLSCREEN PRODUCTION REVISION STREAMING WORKSPACE OVERLAY LAYER -->
-    <div id="fullscreenOverlay" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between p-8 text-white select-none transition-all duration-500">
-        <!-- Live Raw Source Background Video Layer Loop Mapping Framework -->
-        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-            <video id="bgVideoLoopNode" class="w-full h-full object-cover opacity-35" loop muted playsinline>
-                <source src="https://raw.githubusercontent.com/parnavar/medwisevideos/main/13409070_1920_1080_25fps.mp4" type="video/mp4">
-            </video>
-        </div>
-
-        <!-- Structural Overlay Header Utilities Container -->
-        <div class="relative z-10 flex justify-between items-center w-full bg-gradient-to-b from-black/50 to-transparent p-4 rounded-xl">
-            <div class="flex items-center space-x-2">
-                <div class="w-2.5 h-2.5 rounded-full bg-brand-accent animate-pulse"></div>
-                <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-200">High-Yield Immersive Stream Enabled</span>
-            </div>
-            <button onclick="exitFullscreenSprint()" class="p-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition-all">
-                <i data-lucide="minimize-2" class="w-4 h-4 text-white"></i>
-            </button>
-        </div>
-
-        <!-- Big Countdown Core Digital Block Display -->
-        <div class="relative z-10 text-center space-y-4 my-auto">
-            <div id="fullscreenTimer" class="text-9xl sm:text-[13rem] font-mono font-black tracking-tighter text-white drop-shadow-[0_10px_50px_rgba(0,191,255,0.3)] select-none">25:00</div>
-            <p class="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-brand-accent block" id="fullscreenLabel">Break down board trends with elite clinical accuracy.</p>
-            
-            <div class="flex justify-center space-x-3 pt-2">
-                <button id="fullscreenPlayBtn" onclick="toggleTimerSystem()" class="bg-white text-slate-950 font-extrabold text-xs px-8 py-3.5 rounded-xl transition-all hover:scale-105 shadow-xl">Pause Sprint</button>
-                <button onclick="resetTimerSystem()" class="bg-white/10 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all border border-white/10 hover:bg-white/20">Reset</button>
-            </div>
-        </div>
-
-        <!-- Bottom Audio Gain Volume Level Balancer Parameter Component -->
-        <div class="relative z-10 w-full max-w-xs mx-auto flex items-center space-x-3 bg-black/60 border border-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl">
-            <i data-lucide="volume-2" class="w-4 h-4 text-brand-accent"></i>
-            <input type="range" min="0" max="1" step="0.05" value="0.3" oninput="adjustVolumeLevel(this.value)" class="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-brand-accent">
         </div>
     </div>
 
-    <!-- Production Site Minimal Footer Module Element -->
-    <footer class="bg-white border-t border-slate-100 py-8 px-6 text-center text-xs text-slate-400">
-        <p class="font-bold text-slate-600">Medwise Academy Hub • Engineered by Parnav Roy</p>
-        <p class="mt-0.5">Government Dental College, Calcutta — Faculty of Medical Sciences</p>
-    </footer>
+    <script>
+        // Simulation Environment Parameters
+        let currentStep = 1;
+        const standardAbs = 0.400;
+        const randomTestAbs = (Math.random() * (0.680 - 0.220) + 0.220).toFixed(3);
+        const targetGlucose = Math.round((randomTestAbs / standardAbs) * 100);
 
-    <!-- Initialization Script Core Logic Assignment -->
-    <script src="app.js"></script>
+        const promptBanner = document.getElementById('main-prompt');
+        const actionBtn = document.getElementById('action-btn');
+        const reactionFluid = document.getElementById('reaction-fluid');
+        const calibScreen = document.getElementById('calib-screen');
+        const zeroBtn = document.getElementById('zero-btn');
+        const mainTube = document.getElementById('main-tube');
+
+        function updateStepTrackers(stepNum, status) {
+            const row = document.getElementById(`step-${stepNum}`);
+            if (!row) return;
+            if (status === 'active') {
+                row.className = 'step-item active';
+                row.querySelector('i').className = 'fa-solid fa-circle-notch fa-spin';
+            } else if (status === 'completed') {
+                row.className = 'step-item completed';
+                row.querySelector('i').className = 'fa-solid fa-circle-check';
+            }
+        }
+
+        // Native Drag & Drop Handlers for Micropipettes
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function dragLeave(ev) {
+            ev.currentTarget.classList.remove('drag-over');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            ev.target.classList.add('dragging');
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            const data = ev.dataTransfer.getData("text");
+            const draggedElement = document.getElementById(data);
+            if (!draggedElement) return;
+
+            if (currentStep === 1 && data === "pipette-r") {
+                draggedElement.parentNode.removeChild(draggedElement);
+                reactionFluid.style.height = "55%";
+                reactionFluid.style.background = "rgba(56, 189, 248, 0.4)";
+                
+                updateStepTrackers(1, 'completed');
+                currentStep = 2;
+                updateStepTrackers(2, 'active');
+                
+                promptBanner.innerHTML = `<strong>Step 2:</strong> Outstanding. Now drag the 10 µL Micropipette loaded on the <strong>Patient Plasma</strong> bottle and deliver it to the Reaction Tube.`;
+                
+                const pipetteS = document.getElementById('pipette-s');
+                pipetteS.style.display = 'block';
+                pipetteS.setAttribute('draggable', 'true');
+                pipetteS.addEventListener('dragstart', drag);
+            } 
+            else if (currentStep === 2 && data === "pipette-s") {
+                draggedElement.parentNode.removeChild(draggedElement);
+                reactionFluid.style.height = "60%";
+                reactionFluid.style.background = "rgba(14, 165, 233, 0.5)";
+                
+                updateStepTrackers(2, 'completed');
+                currentStep = 3;
+                updateStepTrackers(3, 'active');
+                
+                promptBanner.innerHTML = `<strong>Step 3:</strong> Enzymes and sample unified. Click the <strong>Mix & Incubate</strong> action button below to trigger the production of the Quinoneimine pink color complex.`;
+                actionBtn.disabled = false;
+            }
+        }
+
+        // Step 3: Mixing and Incubation Execution
+        function handleIncubation() {
+            actionBtn.disabled = true;
+            mainTube.classList.add('shaking');
+            promptBanner.innerHTML = `🔬 <em>Incubating tracking profile at 37°C... Hydrogen peroxide reacts with 4-aminophenazone and phenol...</em>`;
+            
+            setTimeout(() => {
+                mainTube.classList.remove('shaking');
+                reactionFluid.style.background = "rgba(244, 63, 94, 0.75)"; // Shifts color into clinical pink complex
+                
+                updateStepTrackers(3, 'completed');
+                currentStep = 4;
+                updateStepTrackers(4, 'active');
+
+                promptBanner.innerHTML = `<strong>Step 4:</strong> Notice the pink complex! Before reading it, we must clear systemic calibration. Drag the <strong>Distilled H₂O</strong> tube (which acts as your blank) into the Colorimeter slot.`;
+                
+                // Convert water container into a draggable test tube object for zeroing calibration steps
+                const h2oVial = document.getElementById('vial-dh2o');
+                const h2oWrap = document.getElementById('wrap-dh2o');
+                const h2oVessel = h2oWrap.querySelector('.vessel');
+                
+                h2oVessel.className = "vessel tube";
+                h2oVessel.id = "blank-tube";
+                h2oVessel.setAttribute('draggable', 'true');
+                h2oVessel.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData("text", "blank-tube");
+                });
+                
+                calibScreen.innerText = "READY";
+            }, 3000);
+        }
+
+        // Colorimeter Processing Interactivity
+        function dragTube(ev) {
+            if (currentStep === 5) {
+                ev.dataTransfer.setData("text", "main-tube");
+            }
+        }
+
+        function dropTube(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            const elementId = ev.dataTransfer.getData("text");
+            
+            if (currentStep === 4 && elementId === "blank-tube") {
+                document.getElementById('blank-tube').style.display = 'none';
+                calibScreen.innerText = "1.245"; // Uncalibrated background baseline readout
+                zeroBtn.disabled = false;
+                promptBanner.innerHTML = `<strong>Calibration:</strong> Distilled water blank inside slot. Click the red <strong>ZERO</strong> button to calibrate baseline absorbance to 0.000.`;
+            } 
+            else if (currentStep === 5 && elementId === "main-tube") {
+                mainTube.style.display = 'none';
+                calibScreen.innerText = `A=${randomTestAbs}`;
+                
+                updateStepTrackers(5, 'completed');
+                promptBanner.style.borderColor = "#10b981";
+                promptBanner.innerHTML = `🎉 <strong>Absorbance Captured!</strong> Metrics parameter reads exactly <strong>${randomTestAbs}</strong>. Use the diagnostic panel matrix on the right to verify patient diagnostics.`;
+                
+                document.getElementById('metric-givens').innerHTML = `
+                    • Standard Absorbance (A_Std) = <strong>${standardAbs.toFixed(3)}</strong><br>
+                    • Patient Absorbance (A_Test) = <strong>${randomTestAbs}</strong>
+                `;
+                document.getElementById('calc-matrix').classList.add('visible');
+            }
+        }
+
+        function zeroDevice() {
+            zeroBtn.disabled = true;
+            calibScreen.innerText = "0.000";
+            
+            setTimeout(() => {
+                updateStepTrackers(4, 'completed');
+                currentStep = 5;
+                updateStepTrackers(5, 'active');
+                
+                promptBanner.innerHTML = `<strong>Step 5:</strong> Colorimeter calibrated! Now drag the pink <strong>Reaction Tube</strong> directly into the Colorimeter slot to perform the diagnostic photometric measurement at 505nm.`;
+                
+                mainTube.setAttribute('draggable', 'true');
+            }, 1000);
+        }
+
+        // Final Metric Calculations Evaluation Validation
+        function verifyMetrics() {
+            const userAns = parseFloat(document.getElementById('user-input-calc').value);
+            if (isNaN(userAns)) {
+                alert("Please calculate and enter a quantitative numeric range.");
+                return;
+            }
+
+            if (Math.abs(userAns - targetGlucose) <= 1) {
+                let rangeEvaluation = userAns < 140 ? "Normal Glycemic State" : "Hyperglycemic Range (Diabetic Indication)";
+                promptBanner.innerHTML = `
+                    <i class="fa-solid fa-square-check" style="color:#10b981;"></i> 
+                    <strong>Evaluation Verified!</strong> Final calculation: <strong>${userAns} mg/dL</strong>.<br>
+                    Clinical Diagnosis profile indicates a <strong>${rangeEvaluation}</strong>. Processing successfully complete.
+                `;
+                promptBanner.style.background = "rgba(6, 78, 59, 0.6)";
+                document.getElementById('calc-matrix').innerHTML = `<h3 style="color:#10b981;">Execution Checked Verified</h3><p style="font-size:13px;">Excellent clinical workflow proficiency demonstrated.</p>`;
+            } else {
+                alert(`Calculation variance detected. Re-verify conversion execution rule: (${randomTestAbs} / 0.400) * 100`);
+            }
+        }
+    </script>
 </body>
 </html>
