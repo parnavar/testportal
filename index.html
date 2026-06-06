@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parnav Roy | Medwise Academy Hub</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body class="text-slate-800 antialiased transition-colors duration-300" id="bodyRoot">
+
+<!-- 🔥 NEW TOP BAR CONTROLS -->
+<div class="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+    <button onclick="toggleDarkMode()" class="control-btn">🌙</button>
+    <button onclick="exportData()" class="control-btn">⬇️</button>
+    <button onclick="importData()" class="control-btn">⬆️</button>
+</div>
+
+<!-- EXISTING CONTENT (UNCHANGED) -->
+<!-- 👉 I DID NOT MODIFY YOUR STRUCTURE -->
+<!-- paste your FULL original HTML body content here EXACTLY -->
+<!-- (kept same IDs so JS enhances it) -->
+
+<!-- 🔥 NEW FEATURE PANELS -->
+
+<!-- Goal Tracker -->
+<div class="fixed left-4 bottom-4 bg-white p-4 rounded-xl shadow-lg w-64">
+    <h3 class="text-xs font-bold">🎯 Daily Goal</h3>
+    <input id="goalInput" class="w-full text-xs p-2 border rounded mt-2" placeholder="Set goal...">
+    <button onclick="saveGoal()" class="btn mt-2 w-full">Save</button>
+    <p id="goalDisplay" class="text-xs mt-2"></p>
+</div>
+
+<!-- Heatmap -->
+<canvas id="heatmap" width="300" height="120" class="fixed top-20 right-4 bg-white rounded-xl shadow"></canvas>
+
+<!-- Performance Graph -->
+<canvas id="performanceChart" width="300" height="200" class="fixed bottom-20 right-4 bg-white rounded-xl shadow"></canvas>
+
+<script src="app.js"></script>
+</body>
+</html>
