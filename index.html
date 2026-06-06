@@ -1,47 +1,382 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parnav Roy | Medwise Academy Hub</title>
-
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parnav Roy | Medwise Academy Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom Extracted CSS File Connection -->
+    <link rel="stylesheet" href="styles.css">
 </head>
+<body class="text-slate-800 antialiased selection:bg-brand/10 transition-colors duration-300">
 
-<body class="text-slate-800 antialiased transition-colors duration-300" id="bodyRoot">
+    <!-- Top Sticky Navigation Bar -->
+    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-brand to-brand-dark flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-brand/20">
+                PR
+            </div>
+            <div>
+                <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">PARNAV ROY</span>
+                <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-[-2px]">Medwise Academy</span>
+            </div>
+        </div>
 
-<!-- 🔥 NEW TOP BAR CONTROLS -->
-<div class="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
-    <button onclick="toggleDarkMode()" class="control-btn">🌙</button>
-    <button onclick="exportData()" class="control-btn">⬇️</button>
-    <button onclick="importData()" class="control-btn">⬆️</button>
-</div>
+        <div class="flex items-center space-x-4">
+            <!-- Live Clock Widget Component Layer -->
+            <div class="hidden md:flex items-center space-x-2 bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-slate-500">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-brand animate-pulse"></i>
+                <span id="liveDigitalClock">00:00:00 IST</span>
+            </div>
 
-<!-- EXISTING CONTENT (UNCHANGED) -->
-<!-- 👉 I DID NOT MODIFY YOUR STRUCTURE -->
-<!-- paste your FULL original HTML body content here EXACTLY -->
-<!-- (kept same IDs so JS enhances it) -->
+            <div class="hidden xl:flex space-x-6 text-xs font-bold uppercase tracking-wider text-slate-500 mr-4">
+                <a href="#about" class="hover:text-brand transition-colors">Instructor</a>
+                <a href="#productivity" class="hover:text-brand transition-colors">Productivity Matrix</a>
+                <a href="#curriculum" class="hover:text-brand transition-colors">Syllabus Vault</a>
+                <a href="#recall-zone" class="hover:text-brand transition-colors">Active Recall</a>
+                <a href="#analytics" class="hover:text-brand transition-colors">Performance Analytics</a>
+            </div>
+            
+            <select id="boardFilter" onchange="filterBoard(this.value)" class="bg-brand-light text-brand text-xs font-bold px-3 py-2 rounded-xl border border-brand/10 outline-none cursor-pointer hover:bg-brand-slate transition-all">
+                <option value="all">All Curriculum</option>
+                <option value="icse">ICSE Class 10</option>
+                <option value="cbse">CBSE Class 10</option>
+            </select>
+        </div>
+    </nav>
 
-<!-- 🔥 NEW FEATURE PANELS -->
+    <!-- Main Grid Workspace Layout -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
 
-<!-- Goal Tracker -->
-<div class="fixed left-4 bottom-4 bg-white p-4 rounded-xl shadow-lg w-64">
-    <h3 class="text-xs font-bold">🎯 Daily Goal</h3>
-    <input id="goalInput" class="w-full text-xs p-2 border rounded mt-2" placeholder="Set goal...">
-    <button onclick="saveGoal()" class="btn mt-2 w-full">Save</button>
-    <p id="goalDisplay" class="text-xs mt-2"></p>
-</div>
+        <!-- Instructor Banner Section -->
+        <section id="about" class="glass-card rounded-3xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 shadow-sm relative overflow-hidden">
+            <div class="lg:col-span-2 space-y-3">
+                <div class="inline-flex items-center space-x-2 bg-brand-light text-brand text-xs font-bold px-3 py-1 rounded-full">
+                    <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                    <span>Taught by Parnav Roy • Government Dental College, Calcutta</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Class 10 Advanced Science Performance Hub
+                </h1>
+                <p class="text-slate-600 max-w-3xl text-sm leading-relaxed">
+                    Welcome to your custom digital study station. This workspace combines standard curriculum files with advanced diagnostic trackers, study tools, and timers built to help you master Class 10 Biology and Chemistry systematically.
+                </p>
+            </div>
+            <!-- Quick Session Goals Widget -->
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wide text-slate-400">Target Benchmark</span>
+                    <span class="text-xs font-bold text-brand">2026 Board Layout</span>
+                </div>
+                <div class="text-2xl font-black text-slate-800">100% Mastery Goal</div>
+                <p class="text-[11px] text-slate-400 mt-1">Interleave subject blocks to reinforce spatial memory.</p>
+            </div>
+        </section>
 
-<!-- Heatmap -->
-<canvas id="heatmap" width="300" height="120" class="fixed top-20 right-4 bg-white rounded-xl shadow"></canvas>
+        <!-- Advanced Productivity Matrix Grid Area -->
+        <section id="productivity" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Focus Engine Panel (Timer & Ambient Media Controllers) -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between shadow-sm relative group overflow-hidden">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                            <i data-lucide="timer" class="w-4 h-4 text-brand"></i> Focus Engine
+                        </h3>
+                        <button onclick="launchFullscreenSprint()" class="p-1.5 bg-slate-50 hover:bg-brand-light text-slate-500 hover:text-brand rounded-lg transition-all" title="Launch Immersive Fullscreen">
+                            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
 
-<!-- Performance Graph -->
-<canvas id="performanceChart" width="300" height="200" class="fixed bottom-20 right-4 bg-white rounded-xl shadow"></canvas>
+                    <!-- Media Selection Panel -->
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-2">
+                        <label class="text-[10px] font-bold text-slate-400 block uppercase tracking-wide">High-Yield Energy Audio Track</label>
+                        <div class="flex gap-2">
+                            <button onclick="setAudioSource('refreshing')" id="btn-audio-refreshing" class="flex-1 py-1.5 bg-brand text-white text-xs font-bold rounded-lg border border-brand/10 transition-all">⚡ Refreshing Mix</button>
+                            <button onclick="setAudioSource('motivating')" id="btn-audio-motivating" class="flex-1 py-1.5 bg-white text-slate-600 text-xs font-bold rounded-lg border border-slate-200 hover:border-brand/40 transition-all">🔥 Motivational Beat</button>
+                        </div>
+                    </div>
 
-<script src="app.js"></script>
+                    <!-- Digital Countdown Display -->
+                    <div class="text-center py-4 space-y-1">
+                        <div id="miniTimer" class="text-5xl font-mono font-black tracking-tight text-slate-900">25:00</div>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider" id="sprintLabel">Sprint Strategy: Active</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 mt-4">
+                    <button id="miniPlayBtn" onclick="toggleTimerSystem()" class="flex-1 bg-brand hover:bg-brand-dark text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-md shadow-brand/10">Start Sprint</button>
+                    <button onclick="resetTimerSystem()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+                </div>
+
+                <!-- Web Audio Element Framework Blocks -->
+                <audio id="audio-refreshing" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+                <audio id="audio-motivating" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"></audio>
+            </div>
+
+            <!-- Dynamic Task Management Matrix -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                            <i data-lucide="check-square" class="w-4 h-4 text-brand"></i> Syllabus Checkpoints
+                        </h3>
+                        <span id="taskCounter" class="text-[11px] font-bold bg-brand-light text-brand px-2 py-0.5 rounded-full">0 Completed</span>
+                    </div>
+
+                    <!-- Interactive Task Container Array -->
+                    <div id="todoListContainer" class="space-y-2 max-h-[160px] overflow-y-auto no-scrollbar">
+                        <div class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold">
+                            <span class="text-slate-700">Practice cell cycle mitosis diagram paths</span>
+                            <button onclick="this.parentElement.remove(); updateTaskCounters();" class="text-slate-400 hover:text-rose-500 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 mt-4">
+                    <input type="text" id="newTaskInput" placeholder="Add target chapter checkpoint..." class="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs outline-none focus:border-brand/40 focus:bg-white transition-all">
+                    <button onclick="addNewWorkspaceTask()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 rounded-xl transition-all">Add</button>
+                </div>
+            </div>
+
+            <!-- Live Session Brain Dump / Scratchpad Module -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
+                <div class="space-y-3">
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-4 h-4 text-brand"></i> Smart Note Scratchpad
+                    </h3>
+                    <p class="text-[11px] text-slate-400">Jot down temporary mnemonic mappings, formula derivations, or active observations here.</p>
+                    <textarea id="scratchpadArea" oninput="saveScratchpadContent(this.value)" placeholder="Type structural formula scratch notes here... (Data auto-saves instantly to storage)" class="w-full h-28 p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-mono outline-none focus:border-brand/30 focus:bg-white transition-all resize-none"></textarea>
+                </div>
+                <div class="text-[10px] text-right text-slate-400 font-medium">Auto-Saving to Memory Buffer</div>
+            </div>
+        </section>
+
+        <!-- Advanced Analytics Matrix: Focus Metric Dashboard Rows -->
+        <section id="sessionInsights" class="bg-gradient-to-r from-slate-900 to-brand-dark text-white rounded-3xl p-6 shadow-md grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="flex items-center space-x-4 border-r border-white/10 last:border-0 pr-4">
+                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-accent">
+                    <i data-lucide="zap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Cycles Logged</span>
+                    <span id="statCyclesCounter" class="text-2xl font-black font-mono">0</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 border-r border-white/10 last:border-0 pr-4">
+                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-emerald-400">
+                    <i data-lucide="hourglass" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Productive Time</span>
+                    <span id="statTimeStudied" class="text-2xl font-black font-mono">0 mins</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-amber-400">
+                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Focus Intensity</span>
+                    <span id="statFocusVelocity" class="text-2xl font-black font-mono">Optimal</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Document Resource Framework Grid -->
+        <section id="curriculum" class="space-y-6">
+            <div class="bg-white border border-slate-100 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-sm">
+                <div>
+                    <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">Class 10 High-Yield Chapter Vault</h2>
+                    <p class="text-xs text-slate-400">Click on any module node block to open standalone resource files seamlessly.</p>
+                </div>
+                <div class="relative w-full sm:w-72">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
+                    <input type="text" id="chapterSearch" onkeyup="searchChaptersEngine()" placeholder="Query file path (e.g. cell, table)..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs outline-none focus:border-brand/30 focus:bg-white transition-all">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- BIOLOGY DISCIPLINE PATHS -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2 pb-1 border-b border-slate-200">
+                        <i data-lucide="dna" class="w-4 h-4 text-emerald-600"></i>
+                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Biology Master Files</h4>
+                    </div>
+
+                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
+                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Structure of Chromosomes & Cell Cycle Phases</h5>
+                        </div>
+                        <a href="cell.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+
+                    <div data-board="icse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold tracking-wide text-brand uppercase">ICSE Exclusive Node</span>
+                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Plant Physiology: Absorption Mechanisms & Transpiration Pull</h5>
+                        </div>
+                        <a href="transpiration.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+
+                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
+                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Human Anatomy: Circulatory Network Architecture & Excretory Loops</h5>
+                        </div>
+                        <a href="circulatory_system.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <!-- CHEMISTRY DISCIPLINE PATHS -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2 pb-1 border-b border-slate-200">
+                        <i data-lucide="beaker" class="w-4 h-4 text-amber-600"></i>
+                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Chemistry Master Files</h4>
+                    </div>
+
+                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
+                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Periodic Properties, Trends & Chemical Bonding Trends</h5>
+                        </div>
+                        <a href="periodic_table.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+
+                    <div data-board="icse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold tracking-wide text-brand uppercase">ICSE Exclusive Node</span>
+                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Stoichiometry Balances & Mole Concept Quantities</h5>
+                        </div>
+                        <a href="mole_concept.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+
+                    <div data-board="icse cbse" class="chapter-card p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center custom-shadow group">
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">ICSE & CBSE Syllabus</span>
+                            <h5 class="font-bold text-sm text-slate-800 group-hover:text-brand transition-colors chapter-title">Study of Acids, Bases, Salts Behavior & Industrial Electrolysis</h5>
+                        </div>
+                        <a href="electrolysis.html" class="p-2 bg-slate-50 group-hover:bg-brand group-hover:text-white rounded-xl text-slate-400 transition-all"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Twin Interactive Utility Block Row -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Active Recall Diagnostic Core Module -->
+            <div id="recall-zone" class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm flex flex-col justify-between space-y-4">
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-extrabold tracking-widest text-brand uppercase bg-brand-light px-2.5 py-1 rounded-md">Diagnostic Matrix</span>
+                        <!-- Flashcard Selector Configuration Node -->
+                        <select id="recallSubjectFilter" onchange="swapActiveRecallCategory(this.value)" class="text-xs bg-slate-50 border border-slate-200 rounded-lg p-1 outline-none font-bold text-slate-600">
+                            <option value="all">All Syllabus Core</option>
+                            <option value="bio">Biology Paths</option>
+                            <option value="chem">Chemistry Analysis</option>
+                        </select>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">Active Recall Engine Block</h3>
+                    <p class="text-[11px] text-slate-400">Self-verify essential conceptual trends prior to checking your structural response sets.</p>
+                </div>
+                <div class="bg-slate-50 rounded-2xl p-6 text-center border border-slate-100 min-h-[110px] flex items-center justify-center font-bold text-xs text-slate-700 leading-relaxed transition-all duration-200" id="recallField">
+                    What compound separates at the anode loop during electrolysis of copper sulphate using platinum nodes?
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="revealAnswerBlock()" class="flex-1 bg-brand text-white text-xs font-bold py-2 rounded-xl hover:bg-brand-dark transition-all">Reveal Concept</button>
+                    <button onclick="cycleNextCard()" class="flex-1 bg-white text-slate-700 border border-slate-200 text-xs font-bold py-2 rounded-xl hover:bg-slate-50 transition-all">Next Card</button>
+                </div>
+            </div>
+
+            <!-- Integrated Session Performance Metrics Analytics Widget -->
+            <div id="analytics" class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm flex flex-col justify-between">
+                <div class="space-y-3">
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-brand"></i> Real-Time Diagnostics
+                    </h3>
+                    <p class="text-[11px] text-slate-400">Track structural calibration markers across active recall modules during this study timeline window.</p>
+                    
+                    <div class="space-y-3 pt-2">
+                        <div>
+                            <div class="flex justify-between text-[11px] font-bold text-slate-600 mb-1">
+                                <span>Biology Comprehension Map</span>
+                                <span id="bioBarPct">65%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                <div id="bioBarFluid" class="bg-emerald-500 h-full w-[65%] transition-all duration-500"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[11px] font-bold text-slate-600 mb-1">
+                                <span>Chemistry Analytical Balance</span>
+                                <span id="chemBarPct">40%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                <div id="chemBarFluid" class="bg-amber-500 h-full w-[40%] transition-all duration-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-4 border-t border-slate-100">
+                    <button onclick="boostStatMetric('bio')" class="flex-1 text-[10px] font-bold py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-all">+ Log Bio Mastered</button>
+                    <button onclick="boostStatMetric('chem')" class="flex-1 text-[10px] font-bold py-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg hover:bg-amber-100 transition-all">+ Log Chem Mastered</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FULLSCREEN PRODUCTION REVISION STREAMING WORKSPACE OVERLAY LAYER -->
+    <div id="fullscreenOverlay" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between p-8 text-white select-none transition-all duration-500">
+        <!-- Live Raw Source Background Video Layer Loop Mapping Framework -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+            <video id="bgVideoLoopNode" class="w-full h-full object-cover opacity-35" loop muted playsinline>
+                <source src="https://raw.githubusercontent.com/parnavar/medwisevideos/main/13409070_1920_1080_25fps.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Structural Overlay Header Utilities Container -->
+        <div class="relative z-10 flex justify-between items-center w-full bg-gradient-to-b from-black/50 to-transparent p-4 rounded-xl">
+            <div class="flex items-center space-x-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-brand-accent animate-pulse"></div>
+                <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-200">High-Yield Immersive Stream Enabled</span>
+            </div>
+            <button onclick="exitFullscreenSprint()" class="p-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition-all">
+                <i data-lucide="minimize-2" class="w-4 h-4 text-white"></i>
+            </button>
+        </div>
+
+        <!-- Big Countdown Core Digital Block Display -->
+        <div class="relative z-10 text-center space-y-4 my-auto">
+            <div id="fullscreenTimer" class="text-9xl sm:text-[13rem] font-mono font-black tracking-tighter text-white drop-shadow-[0_10px_50px_rgba(0,191,255,0.3)] select-none">25:00</div>
+            <p class="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-brand-accent block" id="fullscreenLabel">Break down board trends with elite clinical accuracy.</p>
+            
+            <div class="flex justify-center space-x-3 pt-2">
+                <button id="fullscreenPlayBtn" onclick="toggleTimerSystem()" class="bg-white text-slate-950 font-extrabold text-xs px-8 py-3.5 rounded-xl transition-all hover:scale-105 shadow-xl">Pause Sprint</button>
+                <button onclick="resetTimerSystem()" class="bg-white/10 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all border border-white/10 hover:bg-white/20">Reset</button>
+            </div>
+        </div>
+
+        <!-- Bottom Audio Gain Volume Level Balancer Parameter Component -->
+        <div class="relative z-10 w-full max-w-xs mx-auto flex items-center space-x-3 bg-black/60 border border-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl">
+            <i data-lucide="volume-2" class="w-4 h-4 text-brand-accent"></i>
+            <input type="range" min="0" max="1" step="0.05" value="0.3" oninput="adjustVolumeLevel(this.value)" class="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-brand-accent">
+        </div>
+    </div>
+
+    <!-- Production Site Minimal Footer Module Element -->
+    <footer class="bg-white border-t border-slate-100 py-8 px-6 text-center text-xs text-slate-400">
+        <p class="font-bold text-slate-600">Medwise Academy Hub • Engineered by Parnav Roy</p>
+        <p class="mt-0.5">Government Dental College, Calcutta — Faculty of Medical Sciences</p>
+    </footer>
+
+    <!-- Initialization Script Core Logic Assignment -->
+    <script src="app.js"></script>
 </body>
 </html>
