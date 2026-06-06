@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parnav Roy | Advanced GOD-POD Glucose Simulation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght::300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -27,6 +27,7 @@
             box-sizing: border-box;
             font-family: 'Plus Jakarta Sans', sans-serif;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
@@ -34,7 +35,7 @@
             background-attachment: fixed;
             color: var(--text-light);
             min-height: 100vh;
-            padding: 24px;
+            padding: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -48,10 +49,10 @@
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
             border-radius: 28px;
-            padding: 32px;
+            padding: 24px;
             display: grid;
             grid-template-columns: 1fr 360px;
-            gap: 32px;
+            gap: 24px;
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
         }
 
@@ -62,6 +63,8 @@
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .brand {
@@ -74,6 +77,12 @@
         }
         .brand span { color: var(--text-main); }
 
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .method-badge {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -84,6 +93,41 @@
             color: var(--text-main);
             letter-spacing: 0.5px;
         }
+
+        .toggle-info-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .toggle-info-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+        }
+
+        /* Information Overlay Feature */
+        .info-overlay {
+            display: none;
+            grid-column: 1 / -1;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            animation: fadeIn 0.3s ease;
+        }
+        .info-overlay.visible { display: block; }
+        .info-overlay strong { color: var(--text-light); }
 
         /* Lab Stage / Workbench */
         .lab-stage {
@@ -134,6 +178,7 @@
             align-items: flex-end;
             height: 160px;
             width: 100%;
+            touch-action: none;
         }
 
         /* Visual Vessels */
@@ -182,6 +227,7 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            touch-action: none;
         }
         .pipette-tool::after {
             content: '';
@@ -246,7 +292,7 @@
         }
 
         .calib-btn {
-            flex-1: 1;
+            flex: 1;
             padding: 8px;
             background: #ef4444;
             border: none;
@@ -367,6 +413,52 @@
         }
         input[type="number"]:focus { border-color: var(--text-main); }
 
+        /* --- Mobile Responsive Breakpoints --- */
+        @media (max-width: 968px) {
+            .game-container {
+                grid-template-columns: 1fr;
+                padding: 16px;
+                gap: 16px;
+            }
+            .bench-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+                margin: 24px 0;
+            }
+            .lab-stage {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            .brand {
+                font-size: 20px;
+            }
+            .bench-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .bottle {
+                width: 60px;
+                height: 110px;
+            }
+            .tube {
+                width: 32px;
+                height: 120px;
+            }
+            .instruction-banner {
+                font-size: 14px;
+                padding: 12px;
+            }
+            .colorimeter-unit {
+                width: 100%;
+                max-width: 240px;
+            }
+        }
+
         /* Utilities & Animations */
         @keyframes shake {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -384,20 +476,24 @@
 <body>
 
     <div class="game-container">
-        <!-- Application Header -->
         <div class="lab-header">
             <div class="brand"><i class="fa-solid fa-flask-vial"></i> parnav roy <span>| Clinical Biochemistry</span></div>
-            <div class="method-badge">METHOD: GOD-POD PHOTOMETRIC</div>
+            <div class="header-controls">
+                <button class="toggle-info-btn" onclick="toggleInfo()"><i class="fa-solid fa-circle-info"></i> Reaction Info</button>
+                <div class="method-badge">METHOD: GOD-POD PHOTOMETRIC</div>
+            </div>
         </div>
 
-        <!-- Interactive Core Bench Area -->
+        <div class="info-overlay" id="chemical-info">
+            <strong>GOD-POD Principle:</strong> Glucose oxidase (GOD) oxidizes glucose to gluconic acid and hydrogen peroxide ($H_2O_2$). Peroxidase (POD) then catalyzes the reaction of $H_2O_2$ with 4-aminophenazone and phenol to form a pink-colored <strong>quinoneimine dye</strong>. Intensity of the color is directly proportional to glucose concentration.
+        </div>
+
         <div class="lab-stage">
             <div class="instruction-banner" id="main-prompt">
-                <strong>Step 1:</strong> Drag the 1000 µL Micropipette from the GOD-POD Reagent bottle and drop it directly onto the <strong>Reaction Tube</strong> to transfer the substrate enzyme.
+                <strong>Step 1:</strong> Drag the 1000 µL Micropipette from the GOD-POD Reagent bottle and drop it directly onto the <strong>Reaction Tube</strong> to transfer the substrate enzyme. (Mobile: Tap item, then tap destination)
             </div>
 
             <div class="bench-layout">
-                <!-- Distilled Water Bottle -->
                 <div class="lab-item" id="vial-dh2o">
                     <div class="vial-wrapper" id="wrap-dh2o">
                         <div class="vessel bottle">
@@ -407,7 +503,6 @@
                     <span class="label-tag">Distilled H₂O</span>
                 </div>
 
-                <!-- GOD-POD Reagent Bottle -->
                 <div class="lab-item" id="vial-reagent">
                     <div class="vial-wrapper" id="wrap-reagent">
                         <div id="pipette-r" class="pipette-tool" draggable="true" ondragstart="drag(event)"></div>
@@ -418,7 +513,6 @@
                     <span class="label-tag">GOD-POD Reagent</span>
                 </div>
 
-                <!-- Patient Blood Sample -->
                 <div class="lab-item" id="vial-sample">
                     <div class="vial-wrapper" id="wrap-sample">
                         <div id="pipette-s" class="pipette-tool" draggable="false" style="display:none; background:#fda4af;"></div>
@@ -429,7 +523,6 @@
                     <span class="label-tag">Patient Plasma</span>
                 </div>
 
-                <!-- Active Analytical Vessels Container -->
                 <div class="lab-item" id="vial-target">
                     <div class="vial-wrapper" id="wrap-tube" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="drop(event)">
                         <div class="vessel tube" id="main-tube" draggable="false" ondragstart="dragTube(event)">
@@ -440,13 +533,11 @@
                 </div>
             </div>
 
-            <!-- Context Processing Area -->
             <div class="action-row">
                 <button class="btn-prime" id="action-btn" disabled onclick="handleIncubation()">Mix & Incubate Solution</button>
             </div>
         </div>
 
-        <!-- Sidebar Analytics Matrix -->
         <div class="panel-right">
             <div class="card">
                 <h3>Lab Procedure Tracker</h3>
@@ -459,7 +550,6 @@
                 </ul>
             </div>
 
-            <!-- Colorimeter Peripheral Box Inside Tracker Panel -->
             <div class="card" style="display: flex; justify-content: center;">
                 <div class="colorimeter-unit">
                     <div class="screen" id="calib-screen">OFF</div>
@@ -470,7 +560,6 @@
                 </div>
             </div>
 
-            <!-- Mathematical Evaluation Profile -->
             <div class="card matrix-box" id="calc-matrix">
                 <h3>Diagnostic Analytics</h3>
                 <p style="font-size: 13px; color: var(--text-muted);">Concentration Formula Profile:</p>
@@ -503,6 +592,14 @@
         const zeroBtn = document.getElementById('zero-btn');
         const mainTube = document.getElementById('main-tube');
 
+        // New Feature Mobile Interaction Global Handler
+        let activeMobileItem = null;
+
+        function toggleInfo() {
+            const panel = document.getElementById('chemical-info');
+            panel.classList.toggle('visible');
+        }
+
         function updateStepTrackers(stepNum, status) {
             const row = document.getElementById(`step-${stepNum}`);
             if (!row) return;
@@ -534,11 +631,16 @@
             ev.preventDefault();
             ev.currentTarget.classList.remove('drag-over');
             const data = ev.dataTransfer.getData("text");
+            executeDropLogic(data);
+        }
+
+        // Unified extraction logic for cross-platform desktop and mobile simulation engines
+        function executeDropLogic(data) {
             const draggedElement = document.getElementById(data);
             if (!draggedElement) return;
 
             if (currentStep === 1 && data === "pipette-r") {
-                draggedElement.parentNode.removeChild(draggedElement);
+                if (draggedElement.parentNode) draggedElement.parentNode.removeChild(draggedElement);
                 reactionFluid.style.height = "55%";
                 reactionFluid.style.background = "rgba(56, 189, 248, 0.4)";
                 
@@ -552,9 +654,10 @@
                 pipetteS.style.display = 'block';
                 pipetteS.setAttribute('draggable', 'true');
                 pipetteS.addEventListener('dragstart', drag);
+                setupMobileInteractiveNode(pipetteS);
             } 
             else if (currentStep === 2 && data === "pipette-s") {
-                draggedElement.parentNode.removeChild(draggedElement);
+                if (draggedElement.parentNode) draggedElement.parentNode.removeChild(draggedElement);
                 reactionFluid.style.height = "60%";
                 reactionFluid.style.background = "rgba(14, 165, 233, 0.5)";
                 
@@ -594,6 +697,7 @@
                 h2oVessel.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData("text", "blank-tube");
                 });
+                setupMobileInteractiveNode(h2oVessel);
                 
                 calibScreen.innerText = "READY";
             }, 3000);
@@ -610,15 +714,19 @@
             ev.preventDefault();
             ev.currentTarget.classList.remove('drag-over');
             const elementId = ev.dataTransfer.getData("text");
-            
+            executeTubeDropLogic(elementId);
+        }
+
+        function executeTubeDropLogic(elementId) {
             if (currentStep === 4 && elementId === "blank-tube") {
-                document.getElementById('blank-tube').style.display = 'none';
+                const bTube = document.getElementById('blank-tube');
+                if (bTube) bTube.style.display = 'none';
                 calibScreen.innerText = "1.245"; // Uncalibrated background baseline readout
                 zeroBtn.disabled = false;
                 promptBanner.innerHTML = `<strong>Calibration:</strong> Distilled water blank inside slot. Click the red <strong>ZERO</strong> button to calibrate baseline absorbance to 0.000.`;
             } 
             else if (currentStep === 5 && elementId === "main-tube") {
-                mainTube.style.display = 'none';
+                if (mainTube) mainTube.style.display = 'none';
                 calibScreen.innerText = `A=${randomTestAbs}`;
                 
                 updateStepTrackers(5, 'completed');
@@ -645,6 +753,7 @@
                 promptBanner.innerHTML = `<strong>Step 5:</strong> Colorimeter calibrated! Now drag the pink <strong>Reaction Tube</strong> directly into the Colorimeter slot to perform the diagnostic photometric measurement at 505nm.`;
                 
                 mainTube.setAttribute('draggable', 'true');
+                setupMobileInteractiveNode(mainTube);
             }, 1000);
         }
 
@@ -669,6 +778,55 @@
                 alert(`Calculation variance detected. Re-verify conversion execution rule: (${randomTestAbs} / 0.400) * 100`);
             }
         }
+
+        /* --- New Mobile Feature Tap-to-Select Simulation Pipeline --- */
+        function setupMobileInteractiveNode(el) {
+            el.addEventListener('click', function(e) {
+                if (window.innerWidth > 968) return; // Retain default drag configuration on desktops
+                
+                // Block illegal programmatic sequencing selectors
+                if (this.id === 'pipette-r' && currentStep !== 1) return;
+                if (this.id === 'pipette-s' && currentStep !== 2) return;
+                if (this.id === 'blank-tube' && currentStep !== 4) return;
+                if (this.id === 'main-tube' && currentStep !== 5) return;
+
+                if (activeMobileItem) {
+                    activeMobileItem.style.boxShadow = '';
+                }
+
+                activeMobileItem = this;
+                this.style.boxShadow = '0 0 20px #38bdf8';
+                e.stopPropagation();
+            });
+        }
+
+        // Target Destination Target Tap Bindings
+        document.getElementById('wrap-tube').addEventListener('click', function() {
+            if (window.innerWidth <= 968 && activeMobileItem) {
+                if (activeMobileItem.id === 'pipette-r' || activeMobileItem.id === 'pipette-s') {
+                    const id = activeMobileItem.id;
+                    activeMobileItem.style.boxShadow = '';
+                    executeDropLogic(id);
+                    activeMobileItem = null;
+                }
+            }
+        });
+
+        document.getElementById('analyzer-slot').addEventListener('click', function() {
+            if (window.innerWidth <= 968 && activeMobileItem) {
+                if (activeMobileItem.id === 'blank-tube' || activeMobileItem.id === 'main-tube') {
+                    const id = activeMobileItem.id;
+                    activeMobileItem.style.boxShadow = '';
+                    executeTubeDropLogic(id);
+                    activeMobileItem = null;
+                }
+            }
+        });
+
+        // Initialize mobile detection hooks across runtime components
+        document.addEventListener('DOMContentLoaded', () => {
+            setupMobileInteractiveNode(document.getElementById('pipette-r'));
+        });
     </script>
 </body>
 </html>
