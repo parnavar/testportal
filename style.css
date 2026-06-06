@@ -1,28 +1,43 @@
-body.dark {
-    background: #0f172a;
-    color: #e2e8f0;
+/* Custom System Configurations and Performance Typography Mappings */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* Main Background and Structural Layout Parameters */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8fafc;
 }
 
-.control-btn {
-    background: #111;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 14px;
+/* Glassmorphism Structural Core Layout Units */
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 82, 204, 0.08);
 }
 
-.btn {
-    background: #0052cc;
-    color: white;
-    padding: 6px;
-    border-radius: 8px;
+/* Custom Interactive Animations for Layout Nodes */
+.custom-shadow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-canvas {
-    border: 1px solid rgba(0,0,0,0.05);
+.custom-shadow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -15px rgba(0, 82, 204, 0.12);
 }
 
-/* Heatmap colors */
-.heat-low { background: #e0f2fe; }
-.heat-mid { background: #38bdf8; }
-.heat-high { background: #0284c7; }
+/* Standard Cross-Browser Scrollbar Truncation Engine Components */
+.no-scrollbar::-webkit-scrollbar { 
+    display: none; 
+}
+
+.no-scrollbar { 
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}
+
+/* Color Variable Declarations for System References */
+:root {
+    --brand-primary: #0052cc;
+    --brand-dark: #003399;
+    --brand-light: #f0f6ff;
+    --brand-accent: #00bfff;
+}
