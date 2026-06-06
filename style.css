@@ -1,0 +1,28 @@
+body.dark {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+.control-btn {
+    background: #111;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.btn {
+    background: #0052cc;
+    color: white;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+canvas {
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Heatmap colors */
+.heat-low { background: #e0f2fe; }
+.heat-mid { background: #38bdf8; }
+.heat-high { background: #0284c7; }
